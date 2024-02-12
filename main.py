@@ -18,4 +18,20 @@ The test cases are generated so that the answer fits in a 32-bit integer.
 from typing import List
 
 def numDecodings(s: str) -> int:
-    pass
+     # Check if the string is empty or starts with '0'
+    if not s or s[0] == '0':
+        return 0
+    
+    n = len(s)
+    dp = [0] * (n + 1)
+    dp[0], dp[1] = 1, 1
+    
+    for i in range(2, n + 1):
+        # If the current digit is not '0', we can decode it as a single character
+        if s[i - 1] != '0':
+            dp[i] += dp[i - 1]
+        # If the last two digits form a number in the valid range, we can decode it as two characters
+        if 10 <= int(s[i - 2:i]) <= 26:
+            dp[i] += dp[i - 2]
+    
+    return dp[n]
